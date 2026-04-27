@@ -1,10 +1,210 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
-  <title>CNR Biomics</title>
+    <meta charset="UTF-8">
+    <title>User Guide - OpenStack Cloud CNR Biomics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 40px;
+            color: #222;
+        }
+        header {
+            border-bottom: 2px solid #444;
+            margin-bottom: 20px;
+        }
+        h1, h2, h3 {
+            color: #1a4f8b;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+        .note {
+            background: #fff3cd;
+            padding: 10px;
+            border-left: 5px solid #ffc107;
+            margin: 10px 0;
+        }
+        .warning {
+            background: #f8d7da;
+            padding: 10px;
+            border-left: 5px solid #dc3545;
+            margin: 10px 0;
+        }
+    </style>
 </head>
+
 <body>
-  <h1>CNR Biomics</h1>
-  <p>Test</p>
+
+<header>
+    <h1>User Guide OpenStack Cloud</h1>
+    <p><strong>Ambiente:</strong> CNR Biomics Cloud (OpenStack)</p>
+</header>
+
+<section>
+    <h2>1. Introduzione</h2>
+    <p>
+        Questa guida descrive l’utilizzo della piattaforma OpenStack Cloud
+        per l’ambiente CNR Biomics. OpenStack è una piattaforma cloud open-source
+        che consente la gestione di risorse virtuali come macchine, storage e reti.
+    </p>
+</section>
+
+<section>
+    <h2>2. Accesso alla piattaforma</h2>
+    <p>
+        L’accesso avviene tramite dashboard Horizon o API.
+    </p>
+
+    <h3>2.1 Accesso via Dashboard (Horizon)</h3>
+    <ul>
+        <li>Aprire il browser</li>
+        <li>Inserire l’URL del portale OpenStack (fornito dall’amministratore)</li>
+        <li>Effettuare login con username e password istituzionali</li>
+    </ul>
+
+    <h3>2.2 Accesso via CLI</h3>
+    <p>Installare il client OpenStack:</p>
+    <code>pip install openstackclient</code>
+
+    <p>Caricare le credenziali:</p>
+    <code>source openrc.sh</code>
+</section>
+
+<section>
+    <h2>3. Concetti principali</h2>
+    <ul>
+        <li><strong>Project (Tenant):</strong> ambiente isolato di lavoro</li>
+        <li><strong>Instance:</strong> macchina virtuale</li>
+        <li><strong>Flavor:</strong> risorse hardware (CPU, RAM, disco)</li>
+        <li><strong>Image:</strong> sistema operativo base</li>
+        <li><strong>Network:</strong> rete virtuale</li>
+        <li><strong>Security Group:</strong> firewall virtuale</li>
+        <li><strong>Volume:</strong> storage persistente</li>
+    </ul>
+</section>
+
+<section>
+    <h2>4. Creazione di una macchina virtuale (Instance)</h2>
+
+    <ol>
+        <li>Accedere alla dashboard</li>
+        <li>Selezionare <strong>Compute → Instances</strong></li>
+        <li>Cliccare su <em>Launch Instance</em></li>
+        <li>Inserire:
+            <ul>
+                <li>Nome istanza</li>
+                <li>Image (es. Ubuntu, CentOS)</li>
+                <li>Flavor (CPU/RAM)</li>
+                <li>Network</li>
+            </ul>
+        </li>
+        <li>Configurare chiavi SSH</li>
+        <li>Avviare l’istanza</li>
+    </ol>
+
+    <div class="note">
+        È consigliato utilizzare chiavi SSH invece di password per motivi di sicurezza.
+    </div>
+</section>
+
+<section>
+    <h2>5. Gestione delle reti</h2>
+    <p>
+        Le reti in OpenStack permettono la comunicazione tra istanze e verso l’esterno.
+    </p>
+
+    <ul>
+        <li>Creazione rete privata</li>
+        <li>Subnetting</li>
+        <li>Router verso rete pubblica</li>
+    </ul>
+</section>
+
+<section>
+    <h2>6. Security Groups</h2>
+    <p>
+        I Security Groups definiscono le regole firewall per le istanze.
+    </p>
+
+    <ul>
+        <li>Permettere SSH (porta 22)</li>
+        <li>Permettere HTTP (porta 80)</li>
+        <li>Permettere HTTPS (porta 443)</li>
+    </ul>
+
+    <div class="warning">
+        Evitare di aprire tutte le porte verso Internet (0.0.0.0/0) senza necessità.
+    </div>
+</section>
+
+<section>
+    <h2>7. Storage (Volumes)</h2>
+    <p>
+        I volumi sono dischi persistenti separati dalle istanze.
+    </p>
+
+    <ol>
+        <li>Creare volume da <strong>Volumes</strong></li>
+        <li>Selezionare dimensione</li>
+        <li>Attaccare alla VM</li>
+    </ol>
+</section>
+
+<section>
+    <h2>8. Accesso alle istanze</h2>
+    <p>Connessione tramite SSH:</p>
+
+    <code>ssh -i key.pem ubuntu@IP_PUBLICO</code>
+
+    <p>Assicurarsi che la porta 22 sia aperta nei Security Groups.</p>
+</section>
+
+<section>
+    <h2>9. Gestione tramite CLI</h2>
+
+    <p>Lista istanze:</p>
+    <code>openstack server list</code>
+
+    <p>Creazione istanza:</p>
+    <code>openstack server create --image IMAGE --flavor FLAVOR --network NETWORK NAME</code>
+</section>
+
+<section>
+    <h2>10. Troubleshooting</h2>
+
+    <ul>
+        <li><strong>Instance non raggiungibile:</strong> controllare Security Group e Floating IP</li>
+        <li><strong>No SSH access:</strong> verificare chiave e permessi</li>
+        <li><strong>Errore di deploy:</strong> controllare quota progetto</li>
+    </ul>
+</section>
+
+<section>
+    <h2>11. Best Practices</h2>
+
+    <ul>
+        <li>Usare sempre SSH keys</li>
+        <li>Limitare accessi di rete</li>
+        <li>Monitorare uso risorse</li>
+        <li>Eliminare risorse inutilizzate</li>
+    </ul>
+</section>
+
+<section>
+    <h2>12. Supporto</h2>
+    <p>
+        Per supporto tecnico contattare l’amministratore del cloud CNR Biomics o il team IT interno.
+    </p>
+</section>
+
+<footer>
+    <hr>
+    <p><em>Documento generato per OpenStack Cloud User Guide - CNR Biomics</em></p>
+</footer>
+
 </body>
 </html>
